@@ -1,0 +1,15 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Webjet.API/Webjet.Entities/bin/Debug/netcoreapp2.0
+/Webjet.API/Webjet.Entities/obj
+/Webjet.API/Webjet.Repository/bin/Debug/netcoreapp2.0
+/Webjet.API/Webjet.Repository/obj
+/Webjet.API/Webjet.UnitTests/bin/Debug/netcoreapp2.0
+/Webjet.API/Webjet.UnitTests/obj
+/Webjet.API/Webjet.Application/bin/Debug/netcoreapp2.0
+/Webjet.API/Webjet.Application/obj
+/Webjet.API/Webjet.API/bin/Debug/netcoreapp2.0
+/Webjet.API/Webjet.API/obj
+/Webjet.API/.vs/Webjet.API/v15
