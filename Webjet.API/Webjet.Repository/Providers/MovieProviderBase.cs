@@ -34,17 +34,22 @@ namespace Webjet.Repository.Providers
         /// </summary>
         /// <returns><see cref="ProviderMovies"/></returns>
         public virtual ProviderMovies GetMovies()
-        {
-            var providerMovies = new ProviderMovies(_movieProvider);
-
-            return _cacheProvider.GetCacheEntry($"{this.Name + "Movies"}", () =>
+        {            
+            return _cacheProvider.GetCacheEntry($"{this.Name + "_Movies"}", () =>
             {
-                var movies = _moviesProviderClient.Get<MoviesCollection>(_url + "movies").Result;
+                var movies = _moviesProviderClient.Get<MoviesCollection>(_url + "movies")?.Result;
 
-                movies.Movies.OrderBy(movie => movie.Title).ToList()
-                             .ForEach(movie => providerMovies.Movies.Add(movie));
+                if (movies != null)
+                {
+                    var providerMovies = new ProviderMovies(_movieProvider);
 
-                return providerMovies;
+                    movies.Movies.OrderBy(movie => movie.Title).ToList()
+                                 .ForEach(movie => providerMovies.Movies.Add(movie));
+
+                    return providerMovies;
+                }
+
+                return null;
             });
            
             //var providerMovies = new ProviderMovies(this.Name);
@@ -65,11 +70,14 @@ namespace Webjet.Repository.Providers
         public virtual ProviderMovie GetMovie(string id)
         {
             return _cacheProvider.GetCacheEntry($"{this.Name}_Movie_{id}", () =>
-                                                                            new ProviderMovie(
-                                                                                                _movieProvider, 
-                                                                                                _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}").Result
-                                                                                             )
-                                                );
+            {
+                var details = _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}")?.Result;
+
+                if (details == null)
+                    return null;
+
+                return new ProviderMovie(_movieProvider, details);
+            });
 
 
             //return new ProviderMovie(_movieProvider, _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}").Result);

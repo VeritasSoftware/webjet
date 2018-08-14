@@ -26,7 +26,7 @@ namespace Webjet.API
             services.AddMemoryCache();
 
             //Set up dependency injection
-            services.AddScoped<IMovieProviderClient>(p => new MovieProviderClient("sjd1HfkjU83ksdsm3802k"))
+            services.AddScoped<IMovieProviderClient>(p => new MovieProviderClient("sjd1HfkjU83ksdsm3802k", 3))
                     .AddScoped<ICacheProvider>(p => new CacheProvider(p.GetService<IMemoryCache>(), 10))
                     .AddScoped(p => new List<IMovieProvider>()
                                         {

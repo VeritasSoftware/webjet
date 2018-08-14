@@ -44,7 +44,10 @@ namespace Webjet.Repository
                         {
                             var movies = provider.GetMovies();
 
-                            moviesFromAllProviders.Add(movies);
+                            if(movies != null)
+                            {
+                                moviesFromAllProviders.Add(movies);
+                            }                            
 
                             Console.WriteLine($"Successfully got movies from Provider {provider.Name.ToString()}.");
                         }
@@ -74,7 +77,10 @@ namespace Webjet.Repository
                             {
                                 var m = _movieProviders.Single(x => x.Name == providerMovies.Name).GetMovie(movie.ID);
 
-                                movieDetailsFromProviders.Add(m);
+                                if (m != null && m.Movie != null)
+                                {
+                                    movieDetailsFromProviders.Add(m);
+                                }                                
 
                                 Console.WriteLine($"Successfully got movie details  from Provider {providerMovies.Name.ToString()}.");
                             }

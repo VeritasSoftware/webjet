@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Webjet.Repository.Clients
@@ -12,11 +13,13 @@ namespace Webjet.Repository.Clients
     {
         HttpClient _client;
         string _token;
+        int _noOfRetries;
 
-        public MovieProviderClient(string token)
+        public MovieProviderClient(string token, int noOfRetries)
         {
             _client = new HttpClient() { Timeout = new TimeSpan(0, 0, 2) };
             _token = token;
+            _noOfRetries = noOfRetries; 
         }
 
         /// <summary>
@@ -30,17 +33,37 @@ namespace Webjet.Repository.Clients
         {
             _client.DefaultRequestHeaders.Add("x-access-token", _token);
 
-            return await _client.GetAsync(url)
-                                .ContinueWith(async x =>
-                                {
-                                    var result = x.Result;
+            int i = 0;
+            bool isError = false;
+            do
+            {
+                try
+                {
+                    isError = false;
 
-                                    result.EnsureSuccessStatusCode();
+                    return await _client.GetAsync(url)
+                                        .ContinueWith(async x =>
+                                        {
+                                            var result = x.Result;
 
-                                    var response = await result.Content.ReadAsStringAsync();
+                                            result.EnsureSuccessStatusCode();
 
-                                    return JsonConvert.DeserializeObject<TResponse>(response);
-                                }).Result;
+                                            var response = await result.Content.ReadAsStringAsync();
+
+                                            return JsonConvert.DeserializeObject<TResponse>(response);
+                                        }).Result;
+                }
+                catch (Exception ex)
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine($"Attempt {i+1} failed to get data from Provider {url}. {ex.Message}. Trying again.");
+                    isError = true;
+                }
+                i++;
+            }
+            while (isError && (i < _noOfRetries));
+
+            return null;            
         }
     }
 }

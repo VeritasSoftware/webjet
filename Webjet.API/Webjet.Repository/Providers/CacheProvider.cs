@@ -20,12 +20,26 @@ namespace Webjet.Repository.Providers
         public T GetCacheEntry<T>(string key, Func<T> get)
             where T : class
         {
-            return _cache.GetOrCreate(key, entry =>
-            {
-                entry.SlidingExpiration = TimeSpan.FromHours(_cacheDurationInHours);
+            T cacheEntry = null;
 
-                return get();
-            });
+            if (!_cache.TryGetValue(key, out cacheEntry))
+            {
+                // Key not in cache, so get data.
+                cacheEntry = get();
+
+                if (cacheEntry != null)
+                {
+                    // Set cache options.
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromHours(_cacheDurationInHours));
+
+                    // Save data in cache.
+                    _cache.Set(key, cacheEntry, cacheEntryOptions);
+                }                
+            }
+
+            return cacheEntry;            
         }
     }
 }
