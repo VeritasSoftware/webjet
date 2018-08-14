@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Webjet.Entities;
+using Webjet.Repository;
+using Webjet.Repository.Providers;
 
 namespace Webjet.API
 {
@@ -22,7 +25,17 @@ namespace Webjet.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
+            services.AddScoped(p => new List<IMovieProvider>()
+                                        {
+                                            new CinemaWorldProvider(""),
+                                            new FilmWorldProvider("")
+                                        }
+                              )
+                    .AddScoped<IMovieRepository, MovieRepository>();
+
+            services.BuildServiceProvider();
+
             services.AddMvc();
         }
 

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Class1.cs~RFa8acd12f.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Webjet.Entities\Webjet.Entities.csproj" />
   </ItemGroup>
 
