@@ -1,4 +1,5 @@
 ﻿using Webjet.Entities;
+using Webjet.Repository.Clients;
 
 namespace Webjet.Repository.Providers
 {
@@ -7,7 +8,9 @@ namespace Webjet.Repository.Providers
     /// </summary>
     public class FilmWorldProvider : MovieProviderBase
     {
-        public FilmWorldProvider(string url) : base(url, Provider.filmworld)
+        public FilmWorldProvider(string url, IMovieProviderClient<MoviesCollection> moviesProviderClient,
+                                             IMovieProviderClient<MovieDetails> movieDetailsProviderClient) 
+            : base(url, Provider.filmworld, moviesProviderClient, movieDetailsProviderClient)
         {
 
         }

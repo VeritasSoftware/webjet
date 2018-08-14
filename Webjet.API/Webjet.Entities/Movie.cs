@@ -1,4 +1,6 @@
-﻿namespace Webjet.Entities
+﻿using System.Collections.Generic;
+
+namespace Webjet.Entities
 {
     /// <summary>
     /// Class Movie
@@ -10,5 +12,13 @@
         public string ID { get; set; }
         public string Type { get; set; }
         public string Poster { get; set; }
+    }
+
+    /// <summary>
+    /// Class MoviesCollection
+    /// </summary>
+    public class MoviesCollection
+    {
+        public IEnumerable<Movie> Movies { get; set; }
     }
 }

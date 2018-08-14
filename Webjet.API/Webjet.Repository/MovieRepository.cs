@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,16 +38,23 @@ namespace Webjet.Repository
                 //Get all movies
                 Parallel.ForEach(_movieProviders, provider =>
                 {                    
-                    var movies = provider.GetMovies();
+                    try
+                    {
+                        var movies = provider.GetMovies();
 
-                    moviesFromAllProviders.Add(movies);
+                        moviesFromAllProviders.Add(movies);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }                    
                 });
 
                 //Get movies that match the title
                 var foundMoviesFromProviders = moviesFromAllProviders.Select(providerMovies => {
                     var p = new ProviderMovies(providerMovies.Name);
 
-                    p.Movies.AddRange(providerMovies.Movies.Where(m => m.Title.Contains(title)));
+                    p.Movies.AddRange(providerMovies.Movies.Where(m => m.Title.ToLower().Contains(title.ToLower())));
 
                     return p;
                 });
@@ -58,14 +66,28 @@ namespace Webjet.Repository
                 {
                     Parallel.ForEach(providerMovies.Movies, movie =>
                     {
-                        var m = _movieProviders.Single(x => x.Name == providerMovies.Name).GetMovie(movie.ID);
-                        movieDetailsFromProviders.Add(m);
+                        try
+                        {
+                            var m = _movieProviders.Single(x => x.Name == providerMovies.Name).GetMovie(movie.ID);
+                            movieDetailsFromProviders.Add(m);
+                        }
+                        catch (Exception)
+                        {
+
+                        }                        
                     });
                 });
 
                 var distictMovies = movieDetailsFromProviders.Distinct(new MovieEqualityComparer());
 
-                var leastPriceMovies = distictMovies.Where(m => decimal.Parse(m.Movie.Price) <= distictMovies.Where(x => x.Name != m.Name).Min(y => decimal.Parse(y.Movie.Price)));
+                var leastPriceMovies = distictMovies.Where(m => {
+
+                    var otherProviders = distictMovies.Where(x => x.Name != m.Name);
+
+                    return decimal.Parse(m.Movie.Price)
+                    <=
+                    (otherProviders.Count() <= 0 ? decimal.Parse(m.Movie.Price) : otherProviders.Min(y => decimal.Parse(y.Movie.Price)));
+                });
 
                 return leastPriceMovies;
             });
