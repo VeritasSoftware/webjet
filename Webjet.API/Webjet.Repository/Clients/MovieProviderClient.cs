@@ -17,7 +17,6 @@ namespace Webjet.Repository.Clients
 
         public MovieProviderClient(string token, int noOfRetries)
         {
-            _client = new HttpClient() { Timeout = new TimeSpan(0, 0, 2) };
             _token = token;
             _noOfRetries = noOfRetries; 
         }
@@ -30,9 +29,7 @@ namespace Webjet.Repository.Clients
         /// <returns><see cref="Task{TResponse}"/></returns>
         public async Task<TResponse> Get<TResponse>(string url)
             where TResponse : class
-        {
-            _client.DefaultRequestHeaders.Add("x-access-token", _token);
-
+        {            
             int i = 0;
             bool isError = false;
             do
@@ -40,6 +37,9 @@ namespace Webjet.Repository.Clients
                 try
                 {
                     isError = false;
+
+                    _client = new HttpClient() { Timeout = new TimeSpan(0, 0, 2) };
+                    _client.DefaultRequestHeaders.Add("x-access-token", _token);
 
                     return await _client.GetAsync(url)
                                         .ContinueWith(async x =>
