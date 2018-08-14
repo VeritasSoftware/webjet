@@ -24,15 +24,17 @@ namespace Webjet.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Get settings from appSettings
             Settings settings = new Settings();
             this.Configuration.GetSection("Settings").Bind(settings);
 
             var token = settings.Token;
             var noOfRetries = settings.NoOfRetries;
             var cacheDurationInHours = settings.CacheDurationInHours;
-            var cinemaWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == "cinemaworld").Url;
-            var filmWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == "filmworld").Url;
+            var cinemaWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == Entities.Provider.cinemaworld.ToString()).Url;
+            var filmWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == Entities.Provider.filmworld.ToString()).Url;
 
+            //Add memory cache
             services.AddMemoryCache();
 
             //Set up dependency injection
