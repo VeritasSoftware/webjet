@@ -22,20 +22,22 @@ namespace Webjet.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+
             //Set up dependency injection
-            services.AddScoped<IMovieProviderClient<MoviesCollection>>(p => new MovieProviderClient<MoviesCollection>("sjd1HfkjU83ksdsm3802k"))
-                    .AddScoped<IMovieProviderClient<MovieDetails>>(p => new MovieProviderClient<MovieDetails>("sjd1HfkjU83ksdsm3802k"))
+            services.AddScoped<IMovieProviderClient>(p => new MovieProviderClient("sjd1HfkjU83ksdsm3802k"))
+                    .AddScoped<ICacheProvider>(p => new CacheProvider(10))
                     .AddScoped(p => new List<IMovieProvider>()
                                         {
                                             new CinemaWorldProvider(
                                                                         "http://webjetapitest.azurewebsites.net/api/cinemaworld/", 
-                                                                        p.GetService<IMovieProviderClient<MoviesCollection>>(),
-                                                                        p.GetService<IMovieProviderClient<MovieDetails>>()
+                                                                        p.GetService<IMovieProviderClient>(),
+                                                                        p.GetService<ICacheProvider>()
                                                                     ),
                                             new FilmWorldProvider(
                                                                     "http://webjetapitest.azurewebsites.net/api/filmworld/", 
-                                                                    p.GetService<IMovieProviderClient<MoviesCollection>>(),
-                                                                    p.GetService<IMovieProviderClient<MovieDetails>>()
+                                                                    p.GetService<IMovieProviderClient>(),
+                                                                    p.GetService<ICacheProvider>()
                                                                  )
                                         }
                               )

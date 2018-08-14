@@ -8,9 +8,9 @@ namespace Webjet.Repository.Providers
     /// </summary>
     public class FilmWorldProvider : MovieProviderBase
     {
-        public FilmWorldProvider(string url, IMovieProviderClient<MoviesCollection> moviesProviderClient,
-                                             IMovieProviderClient<MovieDetails> movieDetailsProviderClient) 
-            : base(url, Provider.filmworld, moviesProviderClient, movieDetailsProviderClient)
+        public FilmWorldProvider(string url, IMovieProviderClient moviesProviderClient,
+                                             ICacheProvider cacheProvidert) 
+            : base(url, Provider.filmworld, moviesProviderClient, cacheProvidert)
         {
 
         }

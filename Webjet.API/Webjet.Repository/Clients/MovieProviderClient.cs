@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Webjet.Repository.Clients
 {
-    public class MovieProviderClient<TResponse> : IMovieProviderClient<TResponse>
-        where TResponse : class
+    public class MovieProviderClient : IMovieProviderClient        
     {
         static HttpClient _client = new HttpClient();
         string _token;
@@ -18,7 +17,8 @@ namespace Webjet.Repository.Clients
             _token = token;
         }
 
-        public async Task<TResponse> Get(string url)
+        public async Task<TResponse> Get<TResponse>(string url)
+            where TResponse : class
         {
             _client.DefaultRequestHeaders.Add("x-access-token", _token);
 

@@ -2,9 +2,9 @@
 
 namespace Webjet.Repository.Clients
 {
-    public interface IMovieProviderClient<TResponse>
-        where TResponse : class
+    public interface IMovieProviderClient        
     {
-        Task<TResponse> Get(string url);
+        Task<TResponse> Get<TResponse>(string url)
+            where TResponse : class;
     }
 }

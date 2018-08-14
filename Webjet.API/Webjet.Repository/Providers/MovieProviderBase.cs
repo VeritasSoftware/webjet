@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Webjet.Entities;
 using Webjet.Repository.Clients;
 
 namespace Webjet.Repository.Providers
-{
+{    
     /// <summary>
     /// Abstract class MovieProviderBase
     /// </summary>
@@ -11,17 +14,17 @@ namespace Webjet.Repository.Providers
     {
         private string _url;
         private Provider _movieProvider;
-        private IMovieProviderClient<MoviesCollection> _moviesProviderClient;
-        private IMovieProviderClient<MovieDetails> _movieDetailsProviderClient;
+        private IMovieProviderClient _moviesProviderClient;
+        private ICacheProvider _cacheProvider;
 
         public MovieProviderBase(string url, Provider movieProvider, 
-                                    IMovieProviderClient<MoviesCollection> moviesProviderClient,
-                                    IMovieProviderClient<MovieDetails> movieDetailsProviderClient)
+                                    IMovieProviderClient moviesProviderClient,
+                                    ICacheProvider cacheProvider)
         {
             _url = url;
             _movieProvider = movieProvider;
             _moviesProviderClient = moviesProviderClient;
-            _movieDetailsProviderClient = movieDetailsProviderClient;
+            _cacheProvider = cacheProvider;
         }
 
         public Provider Name => _movieProvider;
@@ -34,12 +37,15 @@ namespace Webjet.Repository.Providers
         {
             var providerMovies = new ProviderMovies(_movieProvider);
 
-            var movies = _moviesProviderClient.Get(_url + "movies").Result;
+            return _cacheProvider.GetCacheEntry($"{this.Name + "Movies"}", () =>
+            {
+                var movies = _moviesProviderClient.Get<MoviesCollection>(_url + "movies").Result;
 
-            movies.Movies.ToList().ForEach(movie => providerMovies.Movies.Add(movie));
+                movies.Movies.ToList().ForEach(movie => providerMovies.Movies.Add(movie));
 
-            return providerMovies;
-
+                return providerMovies;
+            });
+           
             //var providerMovies = new ProviderMovies(this.Name);
 
             //providerMovies.Movies.AddRange(new List<Movie>()
@@ -57,7 +63,15 @@ namespace Webjet.Repository.Providers
         /// <returns></returns>
         public virtual ProviderMovie GetMovie(string id)
         {
-            return new ProviderMovie(_movieProvider, _movieDetailsProviderClient.Get(_url + $"movie/{id}").Result);
+            return _cacheProvider.GetCacheEntry($"{this.Name + "Movie" + "id"}", () =>
+                                                                            new ProviderMovie(
+                                                                                                _movieProvider, 
+                                                                                                _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}").Result
+                                                                                             )
+                                                );
+
+
+            //return new ProviderMovie(_movieProvider, _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}").Result);
 
             //if (this.Name == Provider.cinemaworld)
             //{
