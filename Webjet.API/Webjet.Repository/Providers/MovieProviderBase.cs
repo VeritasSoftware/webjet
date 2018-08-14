@@ -3,6 +3,9 @@ using Webjet.Entities;
 
 namespace Webjet.Repository.Providers
 {
+    /// <summary>
+    /// Abstract class MovieProviderBase
+    /// </summary>
     public abstract class MovieProviderBase : IMovieProvider
     {
         private Provider _movieProvider;
@@ -14,26 +17,47 @@ namespace Webjet.Repository.Providers
 
         public Provider Name => _movieProvider;
 
+        /// <summary>
+        /// Get movies for the provider
+        /// </summary>
+        /// <returns><see cref="ProviderMovies"/></returns>
         public virtual ProviderMovies GetMovies()
         {
             var providerMovies = new ProviderMovies(this.Name);
 
-            providerMovies.Movies.AddRange(new List<MovieBase>()
+            providerMovies.Movies.AddRange(new List<Movie>()
             {
-                new MovieBase { ID = "1", Title = "The return of the Jedi" }
+                new Movie { ID = "1", Title = "The return of the Jedi" }
             });
 
             return providerMovies;
         }
 
+        /// <summary>
+        /// Get movie details for the provider
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public virtual ProviderMovie GetMovie(string id)
         {
-            return new ProviderMovie(this.Name, new Movie
+            if (this.Name == Provider.cinemaworld)
             {
-                Title = "The return of the Jedi",
-                Price = "100",
-                ID = "1"
-            });
+                return new ProviderMovie(this.Name, new MovieDetails
+                {
+                    Title = "The return of the Jedi",
+                    Price = "100",
+                    ID = "1"
+                });
+            }
+            else
+            {
+                return new ProviderMovie(this.Name, new MovieDetails
+                {
+                    Title = "The return of the Jedi",
+                    Price = "150",
+                    ID = "1"
+                });
+            }            
         }
     }
 }

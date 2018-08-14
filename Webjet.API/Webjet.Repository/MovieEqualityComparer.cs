@@ -3,6 +3,9 @@ using Webjet.Entities;
 
 namespace Webjet.Repository
 {
+    /// <summary>
+    /// Class MovieEqualityComparer
+    /// </summary>
     public class MovieEqualityComparer : IEqualityComparer<ProviderMovie>
     {
         public bool Equals(ProviderMovie x, ProviderMovie y)

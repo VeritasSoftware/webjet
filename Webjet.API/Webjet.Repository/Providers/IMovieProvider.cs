@@ -2,6 +2,9 @@
 
 namespace Webjet.Repository.Providers
 {
+    /// <summary>
+    /// Interface IMovieProvider
+    /// </summary>
     public interface IMovieProvider
     {
         Provider Name { get; }
