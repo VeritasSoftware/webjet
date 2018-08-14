@@ -41,7 +41,8 @@ namespace Webjet.Repository.Providers
             {
                 var movies = _moviesProviderClient.Get<MoviesCollection>(_url + "movies").Result;
 
-                movies.Movies.ToList().ForEach(movie => providerMovies.Movies.Add(movie));
+                movies.Movies.OrderBy(movie => movie.Title).ToList()
+                             .ForEach(movie => providerMovies.Movies.Add(movie));
 
                 return providerMovies;
             });
@@ -63,7 +64,7 @@ namespace Webjet.Repository.Providers
         /// <returns></returns>
         public virtual ProviderMovie GetMovie(string id)
         {
-            return _cacheProvider.GetCacheEntry($"{this.Name + "Movie" + "id"}", () =>
+            return _cacheProvider.GetCacheEntry($"{this.Name}_Movie_{id}", () =>
                                                                             new ProviderMovie(
                                                                                                 _movieProvider, 
                                                                                                 _moviesProviderClient.Get<MovieDetails>(_url + $"movie/{id}").Result

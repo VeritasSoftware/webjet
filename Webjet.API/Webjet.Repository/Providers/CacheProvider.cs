@@ -9,16 +9,12 @@ namespace Webjet.Repository.Providers
     public class CacheProvider : ICacheProvider
     {
         IMemoryCache _cache;
-        int _cacheDurationInHours;
+        int _cacheDurationInHours;        
 
-        public CacheProvider(int cacheDurationInHours)
-        {
-            _cacheDurationInHours = cacheDurationInHours;
-        }
-
-        public CacheProvider(IMemoryCache memoryCache)
+        public CacheProvider(IMemoryCache memoryCache, int cacheDurationInHours)
         {
             _cache = memoryCache;
+            _cacheDurationInHours = cacheDurationInHours;
         }
 
         public T GetCacheEntry<T>(string key, Func<T> get)

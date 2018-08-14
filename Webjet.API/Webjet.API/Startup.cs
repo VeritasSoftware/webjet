@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Webjet.API
 
             //Set up dependency injection
             services.AddScoped<IMovieProviderClient>(p => new MovieProviderClient("sjd1HfkjU83ksdsm3802k"))
-                    .AddScoped<ICacheProvider>(p => new CacheProvider(10))
+                    .AddScoped<ICacheProvider>(p => new CacheProvider(p.GetService<IMemoryCache>(), 10))
                     .AddScoped(p => new List<IMovieProvider>()
                                         {
                                             new CinemaWorldProvider(

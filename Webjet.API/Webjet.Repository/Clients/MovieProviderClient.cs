@@ -1,22 +1,30 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Webjet.Repository.Clients
 {
+    /// <summary>
+    /// Class MovieProviderClient
+    /// </summary>
     public class MovieProviderClient : IMovieProviderClient        
     {
-        static HttpClient _client = new HttpClient();
+        HttpClient _client;
         string _token;
 
         public MovieProviderClient(string token)
         {
+            _client = new HttpClient() { Timeout = new TimeSpan(0, 0, 2) };
             _token = token;
         }
 
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <typeparam name="TResponse">The response type</typeparam>
+        /// <param name="url">The url</param>
+        /// <returns><see cref="Task{TResponse}"/></returns>
         public async Task<TResponse> Get<TResponse>(string url)
             where TResponse : class
         {

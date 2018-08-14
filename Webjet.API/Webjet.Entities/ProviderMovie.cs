@@ -8,7 +8,7 @@
         Provider _movieProvider;
         MovieDetails _movie;
 
-        public Provider Name => _movieProvider;
+        public Provider Provider => _movieProvider;
         public MovieDetails Movie => _movie;
 
         public ProviderMovie(Provider movieProvider, MovieDetails movie)

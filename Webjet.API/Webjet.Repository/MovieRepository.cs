@@ -33,63 +33,77 @@ namespace Webjet.Repository
         {
             return await Task.Run(() =>
             {
-                var moviesFromAllProviders = new ConcurrentBag<ProviderMovies>();
-
-                //Get all movies
-                Parallel.ForEach(_movieProviders, provider =>
-                {                    
-                    try
-                    {
-                        var movies = provider.GetMovies();
-
-                        moviesFromAllProviders.Add(movies);
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }                    
-                });
-
-                //Get movies that match the title
-                var foundMoviesFromProviders = moviesFromAllProviders.Select(providerMovies => {
-                    var p = new ProviderMovies(providerMovies.Name);
-
-                    p.Movies.AddRange(providerMovies.Movies.Where(m => m.Title.ToLower().Contains(title.ToLower())));
-
-                    return p;
-                });
-
-                var movieDetailsFromProviders = new ConcurrentBag<ProviderMovie>();
-
-                //Get all movie details for found movies
-                Parallel.ForEach(foundMoviesFromProviders, providerMovies =>
+                try
                 {
-                    Parallel.ForEach(providerMovies.Movies, movie =>
+                    var moviesFromAllProviders = new ConcurrentBag<ProviderMovies>();
+
+                    //Get all movies
+                    Parallel.ForEach(_movieProviders, provider =>
                     {
                         try
                         {
-                            var m = _movieProviders.Single(x => x.Name == providerMovies.Name).GetMovie(movie.ID);
-                            movieDetailsFromProviders.Add(m);
+                            var movies = provider.GetMovies();
+
+                            moviesFromAllProviders.Add(movies);
+
+                            Console.WriteLine($"Successfully got movies from Provider {provider.Name.ToString()}.");
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-
-                        }                        
+                            Console.WriteLine($"Failed to get movies from Provider {provider.Name.ToString()}. {ex.Message}");
+                        }
                     });
-                });
 
-                var distictMovies = movieDetailsFromProviders.Distinct(new MovieEqualityComparer());
+                    //Get movies that match the title
+                    var foundMoviesFromProviders = moviesFromAllProviders.Select(providerMovies => {
+                        var p = new ProviderMovies(providerMovies.Name);
 
-                var leastPriceMovies = distictMovies.Where(m => {
+                        p.Movies.AddRange(providerMovies.Movies.Where(m => m.Title.ToLower().Contains(title.ToLower())));
 
-                    var otherProviders = distictMovies.Where(x => x.Name != m.Name);
+                        return p;
+                    });
 
-                    return decimal.Parse(m.Movie.Price)
-                    <=
-                    (otherProviders.Count() <= 0 ? decimal.Parse(m.Movie.Price) : otherProviders.Min(y => decimal.Parse(y.Movie.Price)));
-                });
+                    var movieDetailsFromProviders = new ConcurrentBag<ProviderMovie>();
 
-                return leastPriceMovies;
+                    //Get all movie details for found movies
+                    Parallel.ForEach(foundMoviesFromProviders, providerMovies =>
+                    {
+                        Parallel.ForEach(providerMovies.Movies, movie =>
+                        {
+                            try
+                            {
+                                var m = _movieProviders.Single(x => x.Name == providerMovies.Name).GetMovie(movie.ID);
+
+                                movieDetailsFromProviders.Add(m);
+
+                                Console.WriteLine($"Successfully got movie details  from Provider {providerMovies.Name.ToString()}.");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Failed to get movie details for { movie.ID } from Provider {providerMovies.Name.ToString()}. {ex.Message}");
+                            }
+                        });
+                    });
+
+                    var distictMovies = movieDetailsFromProviders.Distinct(new MovieEqualityComparer());
+
+                    var leastPriceMovies = distictMovies.Where(m => {
+
+                        var otherProviders = distictMovies.Where(x => x.Provider != m.Provider);
+
+                        return decimal.Parse(m.Movie.Price)
+                        <=
+                        (otherProviders.Count() <= 0 ? decimal.Parse(m.Movie.Price) : otherProviders.Min(y => decimal.Parse(y.Movie.Price)));
+                    });
+
+                    return leastPriceMovies;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to get cheapest deal movies. {ex.Message}");
+
+                    return new List<ProviderMovie>();
+                }                
             });
         }        
     }

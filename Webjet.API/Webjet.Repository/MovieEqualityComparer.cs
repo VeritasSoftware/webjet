@@ -10,7 +10,7 @@ namespace Webjet.Repository
     {
         public bool Equals(ProviderMovie x, ProviderMovie y)
         {
-            return x.Name == y.Name && x.Movie.Title == y.Movie.Title;
+            return x.Provider == y.Provider && x.Movie.Title == y.Movie.Title;
         }
 
         public int GetHashCode(ProviderMovie obj)
