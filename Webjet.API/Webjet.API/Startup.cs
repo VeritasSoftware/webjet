@@ -29,6 +29,7 @@ namespace Webjet.API
 
             var token = settings.Token;
             var noOfRetries = settings.NoOfRetries;
+            var cacheDurationInHours = settings.CacheDurationInHours;
             var cinemaWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == "cinemaworld").Url;
             var filmWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == "filmworld").Url;
 
@@ -36,7 +37,7 @@ namespace Webjet.API
 
             //Set up dependency injection
             services.AddScoped<IMovieProviderClient>(p => new MovieProviderClient(token, noOfRetries))
-                    .AddScoped<ICacheProvider>(p => new CacheProvider(p.GetService<IMemoryCache>(), 10))
+                    .AddScoped<ICacheProvider>(p => new CacheProvider(p.GetService<IMemoryCache>(), cacheDurationInHours))
                     .AddScoped(p => new List<IMovieProvider>()
                                         {
                                             new CinemaWorldProvider(

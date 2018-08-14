@@ -4,6 +4,7 @@
     {
         public string Token { get; set; }
         public int NoOfRetries { get; set; }
+        public int CacheDurationInHours { get; set; }
         public string BaseProviderUrl { get; set; }
         public Provider[] Providers { get; set; }
     }
