@@ -1,9 +1,46 @@
-<p>
-  home works!
-</p>
+<div class="panel panel-primary" style="text-align:center">
+  <div class="panel-heading">
+    {{ title }}
+  </div>
+  <div class="panel-body">
+    <form>
+        <div class="form-group">     
+            <input 
+                    type="text" 
+                    id="Title" 
+                    class="form-control" 
+                    name="Title"                     
+                    [(ngModel)]="movieTitle"                      
+                    placeholder="Enter keyword in movie title" />                  
+        </div>        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" style="width: 40%; height: 50px;" (click)="getCheapestDeal()">Search</button>
+        </div>                      
+    </form>
+  </div>
+</div>
 
-<table>
-  <tr *ngFor="let movie of movies">
-    <td>movie.Title</td>
-  </tr>
+<table *ngIf="movies != null && movies.length > 0" class="table table-striped">
+    <thead class="thead-light">
+        <tr>
+          <th scope="col">Poster</th>
+          <th scope="col">Title</th>
+          <th scope="col">Director</th>
+          <th scope="col">Actors</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let movie of movies" scope="row">
+              <td><img style="width: 50px; height: 50px;" src="{{movie.movie.poster}}" onError="this.src='/assets/image-not-found.jpg';" /></td>
+              <td>{{movie.movie.title}}</td>
+              <td>{{movie.movie.director}}</td>
+              <td>{{movie.movie.actors}}</td>
+              <td>{{movie.movie.price | currency:'USD'}}</td>
+            </tr>
+      </tbody>  
 </table>
+
+<div *ngIf="movies != null && movies.length <= 0">
+  Sorry, no movies matched your search criteria. Please try again.
+</div>

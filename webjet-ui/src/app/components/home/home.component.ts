@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { MoviesService } from '../../services/movies-service'
-import { MovieSource, MovieBase } from '../../models/models';
+import { ProviderMovie } from '../../models/models';
 
 @Component({
   selector: 'app-home',
@@ -9,12 +9,17 @@ import { MovieSource, MovieBase } from '../../models/models';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  movies: Array<MovieBase>;
+  movies: Array<ProviderMovie>;
+  title: string = "Cheapest deal on movies!";
+  movieTitle: string;
 
   constructor(private moviesService: MoviesService) { }
 
   async ngOnInit() {
-    this.movies= await this.moviesService.getMovies(MovieSource.cinemaworld)
+    
   }
 
+  async getCheapestDeal() {
+    this.movies= await this.moviesService.getCheapestDeal(this.movieTitle);
+  }
 }

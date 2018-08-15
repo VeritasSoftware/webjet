@@ -30,3 +30,11 @@ The API comprises of implementations of below interfaces:
 | **IMovieProvider** | All Providers must implement this interface. CinemaWorld and FilmWorld are the current 2 Providers. |
 | **ICacheProvider** | For caching the data returned from the client. Uses built-in **IMemoryCache**. |
 | **IMovieRepository** | Contains repository api. Injected into the controller. Currently has the logic for getting the cheapest deal from the data from Providers. |
+
+# Web app
+
+![Screenshot](https://github.com/VeritasSoftware/webjet/tree/master/webjet-ui/Screenshot.jpg)
+
+*	Has a service called Movies Service. This calls the API.
+*	Has a component to find the cheapest deals on movies.
+*	Enter a keyword from the movie title to search for the cheapest deal.

@@ -1,23 +1,23 @@
-export class MovieBase {
-    ID: string;
-    Title: string;
-    Year: string;
-    Poster: string;
+export class Movie {
+    id: string;
+    title: string;
+    year: string;
+    poster: string;
 }
 
-export class Movie extends MovieBase {    
-    Rated: string;
-    Released: string;
-    Genre: string;
-    Director: string;
-    Actors: string;
-    Plot: string;
-    Language: string;
-    Country: string;
-    Price: string;
+export class MovieDetails extends Movie {    
+    rated: string;
+    released: string;
+    genre: string;
+    director: string;
+    actors: string;
+    plot: string;
+    language: string;
+    country: string;
+    price: string;
 }
 
-export enum MovieSource {
-    cinemaworld,
-    filmworld
+export class ProviderMovie {
+    provider: string;
+    movie: MovieDetails
 }
