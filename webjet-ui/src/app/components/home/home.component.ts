@@ -9,14 +9,15 @@ import { ProviderMovie } from '../../models/models';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  movies: Array<ProviderMovie>;
+  movies: Array<ProviderMovie> = new Array<ProviderMovie>();
   title: string = "Cheapest deal on movies!";
   movieTitle: string;
+  isInitialLoad: boolean = false;
 
   constructor(private moviesService: MoviesService) { }
 
   async ngOnInit() {
-    
+    this.isInitialLoad = true;
   }
 
   async getCheapestDeal() {
@@ -24,7 +25,13 @@ export class HomeComponent implements OnInit {
       alert('Please enter a keyword in the movie title.');
       return;
     }
-
-    this.movies= await this.moviesService.getCheapestDeal(this.movieTitle);
+ 
+    try {      
+      this.movies= await this.moviesService.getCheapestDeal(this.movieTitle);
+      this.isInitialLoad = false;
+    }
+    catch(e) {
+      alert("Error: " + e.message)
+    }    
   }
 }

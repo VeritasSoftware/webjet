@@ -41,6 +41,6 @@
       </tbody>  
 </table>
 
-<div *ngIf="movies != null && movies.length <= 0">
+<div *ngIf="!isInitialLoad && (movies != null && movies.length <= 0)">
   Sorry, no movies matched your search criteria. Please try again.
 </div>
