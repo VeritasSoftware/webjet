@@ -33,7 +33,7 @@ The API comprises of implementations of below interfaces:
 
 # Web app
 
-![Screenshot](https://github.com/VeritasSoftware/webjet/tree/master/webjet-ui/Screenshot.jpg)
+![Screenshot](https://github.com/VeritasSoftware/webjet/blob/master/webjet-ui/Screenshot.jpg)
 
 *	Has a service called Movies Service. This calls the API.
 *	Has a component to find the cheapest deals on movies.
