@@ -28,5 +28,9 @@ The API comprises of implementations of below interfaces:
 | --- | --- |
 | **IMovieProviderClient** | For getting data from Providers using HttpClient. |
 | **IMovieProvider** | All Providers must implement this interface. CinemaWorld and FilmWorld are the current 2 Providers. |
-| ** ICacheProvider** | For caching the data returned from the client. Uses built-in **IMemoryCache**. |
-| ** IMovieRepository ** | Contains repository api. Injected into the controller. Currently has the logic for getting the cheapest deal from the data from Providers. |
+| **ICacheProvider** | For caching the data returned from the client. Uses built-in **IMemoryCache**. |
+| **IMovieRepository** | 
+
+*	Contains repository api. 
+*	Injected into the controller. 
+*	Currently has the logic for getting the cheapest deal from the data from Providers. |
