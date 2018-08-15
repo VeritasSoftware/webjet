@@ -31,8 +31,8 @@ namespace Webjet.API
             var token = settings.Token;
             var noOfRetries = settings.NoOfRetries;
             var cacheDurationInHours = settings.CacheDurationInHours;
-            var cinemaWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == Entities.Provider.cinemaworld.ToString()).Url;
-            var filmWorldUrl = settings.BaseProviderUrl + settings.Providers.Single(p => p.Name == Entities.Provider.filmworld.ToString()).Url;
+            var cinemaWorldUrl = settings.BaseProviderUrl + settings.Providers[Entities.Provider.cinemaworld].Url;
+            var filmWorldUrl = settings.BaseProviderUrl + settings.Providers[Entities.Provider.filmworld].Url;
 
             //Add memory cache
             services.AddMemoryCache();
