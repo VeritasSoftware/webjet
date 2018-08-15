@@ -5,11 +5,11 @@ The app has a **micro service based architecture**.
 The 2 components of the web system are:
 
 *	.Net Core 2.0 Web API - micro service
-*	Angular 6 CLI web app
+*	Angular 6 CLI Web UI App
 
-# Web API
+# .Net Core 2.0 Web API - micro service
 
-*	Uses built-in dependency injection container.
+*	Uses built-in **dependency injection** container.
 *	Uses **Newtonsoft.Json** for json serialization.
 *	Uses built-in **IMemoryCache** for caching.
 *	uses **HttpClient** to make calls to Providers.
@@ -31,7 +31,7 @@ The API comprises of implementations of below interfaces:
 | **ICacheProvider** | For caching the data returned from the client. Uses built-in **IMemoryCache**. |
 | **IMovieRepository** | Contains repository api. Injected into the controller. Currently has the logic for getting the cheapest deal from the data from Providers. |
 
-# Web app
+# Angular 6 CLI Web UI App
 
 ![Screenshot](https://github.com/VeritasSoftware/webjet/blob/master/webjet-ui/Screenshot.jpg)
 
