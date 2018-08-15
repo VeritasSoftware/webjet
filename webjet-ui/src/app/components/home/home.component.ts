@@ -20,6 +20,11 @@ export class HomeComponent implements OnInit {
   }
 
   async getCheapestDeal() {
+    if (this.movieTitle == null || this.movieTitle.length <= 0){
+      alert('Please enter a keyword in the movie title.');
+      return;
+    }
+
     this.movies= await this.moviesService.getCheapestDeal(this.movieTitle);
   }
 }
