@@ -1,8 +1,8 @@
 # Webjet tech test
 
-The app has a **micro service based architecture**.
+The web system has a **micro service based architecture**.
 
-The 2 components of the web system are:
+The 2 components are:
 
 *	.Net Core 2.0 Web API - micro service
 *	Angular 6 CLI Web UI App
@@ -12,7 +12,7 @@ The 2 components of the web system are:
 *	Uses built-in **dependency injection** container.
 *	Uses **Newtonsoft.Json** for json serialization.
 *	Uses built-in **IMemoryCache** for caching.
-*	uses **HttpClient** to make calls to Providers.
+*	Uses **HttpClient** to make calls to Providers.
 
 ## End points:
 
@@ -35,6 +35,6 @@ The API comprises of implementations of below interfaces:
 
 ![Screenshot](https://github.com/VeritasSoftware/webjet/blob/master/webjet-ui/Screenshot.jpg)
 
-*	Has a service called Movies Service. This calls the API.
+*	Has a service called Movies Service. This calls the API using HttpClient.
 *	Has a component to find the cheapest deals on movies.
 *	Enter a keyword from the movie title to search for the cheapest deal.
