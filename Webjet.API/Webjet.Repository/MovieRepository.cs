@@ -91,18 +91,12 @@ namespace Webjet.Repository
                         });
                     });
 
-                    var distictMovies = movieDetailsFromProviders.Distinct(new MovieEqualityComparer());
+                    var distinctMovies = movieDetailsFromProviders.Distinct(new MovieEqualityComparer());
 
-                    var leastPriceMovies = distictMovies.Where(m => {
-
-                        var otherProviders = distictMovies.Where(x => x.Provider != m.Provider);
-
-                        return decimal.Parse(m.Movie.Price)
-                        <=
-                        (otherProviders.Count() <= 0 ? decimal.Parse(m.Movie.Price) : otherProviders.Min(y => decimal.Parse(y.Movie.Price)));
-                    });
-
-                    return leastPriceMovies;
+                    return distinctMovies.GroupBy(x => x.Movie.Title)
+                                         .Select(g => g.MinBy(x => decimal.Parse(x.Movie.Price)))
+                                         .OrderBy(x => x.Movie.Title)
+                                         .ToList();                    
                 }
                 catch (Exception ex)
                 {
