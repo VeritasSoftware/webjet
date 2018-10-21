@@ -1,5 +1,6 @@
-﻿namespace Webjet.API
+﻿namespace Api.Security.Jwt
 {
+    using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
@@ -8,12 +9,17 @@
 
     public static class SecurityExtensions
     {
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, bool addSwaggerSecurity = true)
         {
             var securitySettings = new SecuritySettings();
             configuration.Bind("SecuritySettings", securitySettings);
             services.AddSingleton(securitySettings);
             services.AddScoped<ISecurityService, SecurityService>();
+
+            if (addSwaggerSecurity)
+            {
+                services.AddSecureSwaggerDocumentation();
+            }
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = "JwtBearer";
@@ -39,6 +45,17 @@
             });
 
             return services;
+        }
+
+        public static IApplicationBuilder UseSecurity(this IApplicationBuilder app, bool addSwaggerSecurity = true)
+        {
+            if (addSwaggerSecurity)
+            {
+                app.UseSwaggerDocumentation();
+            }            
+            app.UseAuthentication();
+
+            return app;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Webjet.API
+﻿namespace Api.Security.Jwt
 {
     /// <summary>
     /// ISecurityService interface

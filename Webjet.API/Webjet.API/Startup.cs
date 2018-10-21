@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Api.Security.Jwt;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
 
 namespace Webjet.API
 {
@@ -22,16 +24,15 @@ namespace Webjet.API
             services.AddDependencyInjection(this.Configuration);
 
             services.AddSecurity(this.Configuration);
-            services.AddSecureSwaggerDocumentation();
 
-            services.AddCors();            
+            services.AddCors();
 
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new Info { Title = "Webjet API", Version = "v1" });
             //});
 
-            services.AddMvc();
+            services.AddMvc().AddSecurity();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +44,7 @@ namespace Webjet.API
             }
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            //app.UseSwagger();
 
             app.UseCors(builder =>
                             builder.AllowAnyOrigin()
@@ -58,9 +59,7 @@ namespace Webjet.API
             //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             //});
 
-            app.UseSwaggerDocumentation();
-
-            app.UseAuthentication();
+            app.UseSecurity();
 
             app.UseMvc();
         }

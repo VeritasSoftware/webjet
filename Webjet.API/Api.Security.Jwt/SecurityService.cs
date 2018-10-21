@@ -1,4 +1,4 @@
-﻿namespace Webjet.API
+﻿namespace Api.Security.Jwt
 {
     using Microsoft.IdentityModel.Tokens;
     using System;

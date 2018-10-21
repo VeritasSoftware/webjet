@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Webjet.API.Controllers
+namespace Api.Security.Jwt
 {
     [Produces("application/json")]
     [Route("api/Token")]
