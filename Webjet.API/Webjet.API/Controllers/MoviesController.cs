@@ -6,6 +6,9 @@ using Webjet.Repository;
 
 namespace Webjet.API.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+
+    [Authorize]
     [Route("api/[controller]")]
     public class MoviesController : Controller
     {

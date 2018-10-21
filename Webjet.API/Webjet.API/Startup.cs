@@ -21,12 +21,15 @@ namespace Webjet.API
             //Add dependency injection
             services.AddDependencyInjection(this.Configuration);
 
-            services.AddCors();
+            services.AddSecurity(this.Configuration);
+            services.AddSecureSwaggerDocumentation();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Webjet API", Version = "v1" });
-            });
+            services.AddCors();            
+
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new Info { Title = "Webjet API", Version = "v1" });
+            //});
 
             services.AddMvc();
         }
@@ -50,10 +53,14 @@ namespace Webjet.API
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
             // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+            //app.UseSwaggerUI(c =>
+            //{
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            //});
+
+            app.UseSwaggerDocumentation();
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }
